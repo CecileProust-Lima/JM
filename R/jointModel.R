@@ -182,6 +182,8 @@ jointModel <- function (lmeObject, survObject, timeVar, parameterization = c("va
     # control values
     ind.noadapt <- method. %in% c("weibull-AFT-GH", "weibull-PH-GH", "piecewise-PH-GH", 
         "Cox-PH-GH", "spline-PH-GH")
+
+# change MLA (add nproc=NULL)
     con <- list(only.EM = FALSE, iter.EM = if (method == "spline-PH-GH") 120 else 50, 
         iter.qN = 350, optimizer = "optim", tol1 = 1e-03, tol2 = 1e-04, 
         tol3 = if (!CompRisk) sqrt(.Machine$double.eps) else 1e-09, numeriDeriv = "fd", eps.Hes = 1e-06, 
@@ -190,7 +192,9 @@ jointModel <- function (lmeObject, survObject, timeVar, parameterization = c("va
         lng.in.kn = if (method == "piecewise-PH-GH") 6 else 5, ord = 4, 
         equal.strata.knots = TRUE, typeGH = if (ind.noadapt) "simple" else "adaptive", 
         GHk = if (ncol(Z) < 3 && nrow(Z) < 2000) 15 else 9, 
-        GKk = if (method == "piecewise-PH-GH" || length(Time) > nRisks*nT) 7 else 15, verbose = FALSE)
+        GKk = if (method == "piecewise-PH-GH" || length(Time) > nRisks*nT) 7 else 15, verbose = FALSE, nproc = NULL)
+# end MLA
+    
     if (method == "Cox-PH-GH") {
         con$only.EM <- TRUE
         con$iter.EM <- 200

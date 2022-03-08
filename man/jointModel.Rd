@@ -72,8 +72,10 @@ jointModel(lmeObject, survObject, timeVar,
         \item{iter.EM}{the number of EM iterations. Default is 50 except for \code{method = "Cox-PH-GH"} for which
             the default is 200.}
         \item{iter.qN}{the number of quasi-Newton iterations. Default is 150.}
-        \item{optimizer}{a character string indicating which optimizer to use; options are "optim" (default) and
-            "nlminb".}
+% Change MLA
+        \item{optimizer}{a character string indicating which optimizer to use; options are "optim" (default), "mla" for MarqlevAlg and "nlminb".}
+        \item{nproc}{integer indicating the number of cores for optimization with MarqlevAlg}
+% end change MLA
         \item{tol1}{tolerance value for convergence in the parameters; see \bold{Details}. Default is 1e-03.}
         \item{tol2}{tolerance value for convergence in the parameters; see \bold{Details}. Default is 1e-04.}
         \item{tol3}{tolerance value for convergence in the log-likelihood; see \bold{Details}. Default is 

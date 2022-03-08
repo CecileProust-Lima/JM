@@ -292,9 +292,42 @@ function (x, y, id, initial.values, parameterization, derivForm, control) {
                 control = list(maxit = control$iter.qN, parscale = control$parscale, 
                 trace = 10 * control$verbose))
         } else {
+            
+# change MLA (add optimization via MLA)
+            if (control$optimizer == "mla") {
+                if (control$numeriDeriv==TRUE) {
+                    mla(thetas, m=length(as.vector(thetas)),LogLik.splineGH, maxiter = control$iter.qN,minimize=TRUE,
+                        nproc=control$nproc,print.info=control$verbose)
+                }
+                else { 
+                    mla(thetas, m=length(as.vector(thetas)),LogLik.splineGH,gr=Score.splineGH,minimize=TRUE,
+                        maxiter = control$iter.qN,nproc=control$nproc,print.info=control$verbose)
+                }
+            }
+            else {  
+# end MLA 
+                
             nlminb(thetas, LogLik.splineGH, Score.splineGH, scale = control$parscale, 
                 control = list(iter.max = control$iter.qN, trace = 1 * control$verbose))
+            }
+            
+# change MLA
         }
+        if (control$optimizer == "mla") {
+            out2 <- vector(2,mode="list")
+            out2[[2]] <- out$fn.value
+            out2$par <- out$b
+            out2$iterations <- out$ni
+            out2$convergence <- 1- (out$istop==1)
+# internal computation of the Hessian
+            # out$V <- matrix(0,nrow=length(out$b),ncol=length(out$b))
+            # out$V[upper.tri(out$V,diag=TRUE)] <- out$v
+            # out$V[lower.tri(out$V,diag=FALSE)] <- t(out$V)[lower.tri(out$V,diag=FALSE)]
+            # out2$Hessian <- out$V
+            out <- out2
+        } 
+# end MLA
+            
         if ((conv <- out$convergence) == 0 || - out[[2]] > lgLik) {
             lgLik <- - out[[2]]            
             thetas <- relist(out$par, skeleton = list.thetas)

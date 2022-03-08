@@ -4,6 +4,10 @@ export(aucJM, anova.jointModel, coef.jointModel, crLong, dbs, dns, dynCJM, fitte
 	residuals.jointModel, rocJM, simulateJM, simulate.jointModel, survfitJM, wald.strata, weibull.frailty, 
 	xtable.jointModel)
 
+# change MLA
+import("marqLevAlg")
+# end MLA
+
 # Imported functions
 importFrom(nlme, fixed.effects)
 importFrom(nlme, fixef)
